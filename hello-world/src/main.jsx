@@ -40,7 +40,7 @@ class DoubleClicker extends React.Component {
     return !nextProps.lock;
   }
 
-  inc() {
+  inc = () => {
     this.setState({ count: this.state.count + 2 });
   }
 

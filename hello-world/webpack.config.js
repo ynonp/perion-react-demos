@@ -48,7 +48,10 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrc: false,
-              plugins: ["transform-decorators-legacy"],
+              plugins: [
+                "transform-decorators-legacy",
+                "transform-class-properties",
+              ],
               presets: [
                 'es2017',
                 'react',
