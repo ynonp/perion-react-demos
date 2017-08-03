@@ -10,8 +10,13 @@ const initialData = Immutable.fromJS({
 export default function reducer(state = initialData, action) {
   if (!action) { return state; }
 
-  const actionType = action.type;
-  const handler = handlers[actionType.substr(2)];
+  const actionType = action.type.substr(2);
+  const [ns, actType] = actionType.split('.');
+  if ( ns !== 'game' ) {
+    return state;
+  }
+
+  const handler = handlers[actType];
   if (typeof handler === 'function') {
     return handler(state, action);
   }
@@ -34,5 +39,6 @@ const handlers = {
   restart(state, action) {
     return initialData;
   },
+
 };
 

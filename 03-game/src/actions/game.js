@@ -1,7 +1,6 @@
-
 export const symbols = {
-  play: '@@play',
-  restart: '@@restart',
+  play: '@@game.play',
+  restart: '@@game.restart',
 };
 
 const actions = {
@@ -11,7 +10,8 @@ const actions = {
 
   restart() {
     return { type: symbols.restart }
-  }
+  },
+
 };
 
 export default actions;
