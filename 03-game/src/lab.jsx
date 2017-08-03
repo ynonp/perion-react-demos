@@ -6,24 +6,14 @@ import actions from './actions/game';
 
 window.game = store;
 
+@connect(state => { game: state.game })
 class Game extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = this.stateFromStore();
-
-    this.props.store.subscribe(() => {
-      this.setState(this.stateFromStore());
-    });
-  }
-
-  stateFromStore() {
-    return { 
-      game: this.props.store.getState().game
-    };
   }
 
   play(i, j) {
-    this.props.store.dispatch(actions.play(i, j));
+    this.props.dispatch(actions.play(i, j));
   }
 
   render() {
@@ -51,7 +41,7 @@ class Game extends React.PureComponent {
               key={3 * i + j}
               onClick={this.play.bind(this, i, j)}
             >
-              {this.state.game.getIn(['board', i*3 + j])}
+              {this.props.game.getIn(['board', i*3 + j])}
             </div>
           ))}
         </div>
@@ -61,8 +51,6 @@ class Game extends React.PureComponent {
   }
 }
 
-ReactDOM.render(
-  <Game store={window.game} />,
-  
-  document.querySelector('main'));
+ReactDOM.render(<Game />, document.querySelector('main'));
+
 
