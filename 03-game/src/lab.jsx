@@ -1,13 +1,58 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
+import { Provider, connect } from 'react-redux';
 import store from './store';
 import actions from './actions/game';
+import swactions from './actions/swapi';
 
-window.game = store;
+window.store = store;
+window.swactions = swactions;
 
-@connect(state => { game: state.game })
-class Game extends React.PureComponent {
+@connect(state => ({ characters: state.swapi.get('characters') }))
+class SWInfo extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>SWInfo</h2>        
+        <label>Character ID
+          <input type='text' />
+        </label>
+        <button>Get data for character</button>
+        <select>
+          {this.props.characters.map(character => (
+            <option>{character.get('name')}</option>
+          ))}
+        </select>
+        <p>Selected Character hair color is: {this.props.selectedCharacter && this.props.selectedCharacter.get('hair_color')}</p>
+      </div>
+      );
+  }
+}
+
+
+/*
+function connect(mapStateToProps) {  
+  return function(Component) {   
+    return class extends React.PureComponent {
+      constructor(props) {
+        super(props)
+        this.state = mapStateToProps(window.store.getState());
+        window.store.subscribe(() => {
+          this.setState(mapStateToProps(window.store.getState()));
+        });
+      }
+
+      render() {
+        return <Component {...this.props} {...this.state} dispatch={window.store.dispatch} />
+      }
+    }
+  }
+}
+*/
+
+@connect(state => ({ game: state.game }))
+class Game extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -51,6 +96,12 @@ class Game extends React.PureComponent {
   }
 }
 
-ReactDOM.render(<Game />, document.querySelector('main'));
+ReactDOM.render(
+  <Provider store={window.store}>
+    <div>
+      <SWInfo />
+      <Game />
+    </div>
+  </Provider>, document.querySelector('main'));
 
 

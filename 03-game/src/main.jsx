@@ -6,6 +6,7 @@ import actions from './actions/game';
 
 window.game = store;
 
+
 class Game extends React.PureComponent {
   constructor(props) {
     super(props);
