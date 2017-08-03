@@ -9,19 +9,30 @@ import swactions from './actions/swapi';
 window.store = store;
 window.swactions = swactions;
 
-@connect(state => ({ characters: state.swapi.get('characters') }))
+@connect(state => ({ 
+  characters: state.swapi.get('characters'),
+  selectedCharacter: state.swapi.get('selectedCharacter') 
+}))
 class SWInfo extends React.Component {
+  load = () => {
+    this.props.dispatch(swactions.loadCharacterDetails(this.el.value));
+  }
+
+  selectCharacter = (e) => {
+    this.props.dispatch(swactions.selectCharacter(e.target.value));
+  }
+
   render() {
     return (
       <div>
         <h2>SWInfo</h2>        
         <label>Character ID
-          <input type='text' />
+          <input type='text' ref={(el) => this.el = el} />
         </label>
-        <button>Get data for character</button>
-        <select>
-          {this.props.characters.map(character => (
-            <option>{character.get('name')}</option>
+        <button onClick={this.load}>Get data for character</button>
+        <select value={this.props.selectedCharacter} onChange={this.selectCharacter} >
+          {this.props.characters.map((character, index) => (
+            <option value={index}>{character.get('name')}</option>
           ))}
         </select>
         <p>Selected Character hair color is: {this.props.selectedCharacter && this.props.selectedCharacter.get('hair_color')}</p>

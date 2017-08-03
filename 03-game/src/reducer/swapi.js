@@ -2,7 +2,8 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 const initialData = Immutable.fromJS({
-  characters: [],
+  characters: {},
+  selectedCharacter: null,
 });
 
 export default function reducer(state = initialData, action) {
@@ -18,12 +19,12 @@ export default function reducer(state = initialData, action) {
 
 const handlers = {
   swapi: {
-    gotCharacterDetails(state, { payload: { name, hair_color } }) {
-      return state.update('characters', characters => characters.push(Immutable.fromJS({
-        name,
-        hair_color,
-      })));
+    gotCharacterDetails(state, { payload: { id, characterJson } }) {
+      return state.update('characters', characters => characters.set(id, Immutable.fromJS(characterJson)));
     },
+    selectCharacter(state, { payload: { id } }) {
+      return state.set('selectedCharacter', state.getIn(['characters', id]));
+    }
   }
 };
 
