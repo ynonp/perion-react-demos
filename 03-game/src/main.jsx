@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import store from './store';
+import actions from './actions/game';
 
 window.game = store;
 
@@ -19,6 +20,10 @@ class Game extends React.PureComponent {
     return { 
       game: this.props.store.getState().game
     };
+  }
+
+  play(i, j) {
+    this.props.store.dispatch(actions.play(i, j));
   }
 
   render() {
@@ -40,7 +45,14 @@ class Game extends React.PureComponent {
       {_.range(3).map(i => (
         <div className='row' key={i}>
           {_.range(3).map(j => (
-            <div style={cellStyle} className='cell' key={3 * i + j} >{this.state.game.getIn(['board', i*3 + j])}</div>
+            <div
+              style={cellStyle}
+              className='cell'
+              key={3 * i + j}
+              onClick={this.play.bind(this, i, j)}
+            >
+              {this.state.game.getIn(['board', i*3 + j])}
+            </div>
           ))}
         </div>
       ))}
